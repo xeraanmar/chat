@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دردشة عربية - دخول</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .logo {
+            font-size: 3.5rem;
+            margin-bottom: 10px;
+            color: #667eea;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+        }
+        
+        .input-group {
+            margin-bottom: 25px;
+            text-align: right;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+        }
+        
+        input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-family: 'Tajawal', sans-serif;
+            transition: all 0.3s;
+            background: #f8f9fa;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 16px 40px;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            font-family: 'Tajawal', sans-serif;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+            margin-top: 10px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .features {
+            margin-top: 30px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            text-align: center;
+        }
+        
+        .feature {
+            background: #f0f2ff;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            color: #555;
+        }
+        
+        .feature i {
+            display: block;
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+            color: #667eea;
+        }
+        
+        .server-status {
+            margin-top: 20px;
+            padding: 12px;
+            border-radius: 10px;
+            background: #f8f9fa;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .online {
+            color: #10b981;
+            font-weight: bold;
+        }
+        
+        .error {
+            color: #ef4444;
+            margin-top: 15px;
+            padding: 10px;
+            background: #fee;
+            border-radius: 8px;
+            display: none;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 30px 20px;
+            }
+            
+            .features {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">💬</div>
+        <h1>دردشة عربية عامة</h1>
+        <p class="subtitle">ادخل اسمك للانضمام للدردشة مع الجميع</p>
+        
+        <div class="input-group">
+            <label for="username">اسم المستخدم:</label>
+            <input type="text" id="username" placeholder="مثال: أحمد، سارة، محمد" autocomplete="off" maxlength="20">
+        </div>
+        
+        <button class="btn" id="joinBtn">
+            دخول للدردشة 🚀
+        </button>
+        
+        <div id="error" class="error"></div>
+        
+        <div class="features">
+            <div class="feature">
+                <div>⚡</div>
+                دردشة فورية
+            </div>
+            <div class="feature">
+                <div>👥</div>
+                دردشة جماعية
+            </div>
+            <div class="feature">
+                <div>🔒</div>
+                آمن وسريع
+            </div>
+            <div class="feature">
+                <div>📱</div>
+                متوافق مع جميع الأجهزة
+            </div>
+        </div>
+        
+        <div class="server-status">
+            حالة الخادم: <span id="serverStatus" class="online">● جاهز</span>
+        </div>
+    </div>
+    
+    <script>
+        // التحقق من حالة الخادم
+        async function checkServerStatus() {
+            try {
+                const response = await fetch('/status');
+                const data = await response.json();
+                document.getElementById('serverStatus').textContent = `● جاهز (${data.users} متصلون)`;
+            } catch (error) {
+                document.getElementById('serverStatus').textContent = '● جاري الاتصال...';
+                document.getElementById('serverStatus').style.color = '#f59e0b';
+            }
+        }
+        
+        // دالة الدخول
+        async function joinChat() {
+            const usernameInput = document.getElementById('username');
+            const username = usernameInput.value.trim();
+            const errorDiv = document.getElementById('error');
+            
+            // إعادة تعيين رسالة الخطأ
+            errorDiv.style.display = 'none';
+            
+            // التحقق من اسم المستخدم
+            if (!username) {
+                showError('الرجاء إدخال اسم المستخدم');
+                return;
+            }
+            
+            if (username.length < 2) {
+                showError('الاسم يجب أن يكون على الأقل حرفين');
+                return;
+            }
+            
+            if (username.length > 20) {
+                showError('الاسم يجب أن لا يزيد عن 20 حرفاً');
+                return;
+            }
+            
+            // حفظ الاسم في localStorage
+            localStorage.setItem('chatUsername', username);
+            
+            // الانتقال لصفحة الدردشة
+            window.location.href = '/chat';
+        }
+        
+        function showError(message) {
+            const errorDiv = document.getElementById('error');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+        }
+        
+        // أحداث المستخدم
+        document.getElementById('joinBtn').addEventListener('click', joinChat);
+        
+        document.getElementById('username').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                joinChat();
+            }
+        });
+        
+        // جلب اسم مستخدم سابق إن وجد
+        const savedUsername = localStorage.getItem('chatUsername');
+        if (savedUsername) {
+            document.getElementById('username').value = savedUsername;
+        }
+        
+        // التحقق من حالة الخادم عند التحميل
+        checkServerStatus();
+        
+        // تحديث حالة الخادم كل 30 ثانية
+        setInterval(checkServerStatus, 30000);
+    </script>
+</body>
+</html>

@@ -1,17 +1,16 @@
 {
-  "name": "arabic-chat",
+  "name": "arabic-chat-app",
   "version": "1.0.0",
-  "description": "دردشة عربية سريعة وبسيطة",
+  "description": "دردشة عربية سريعة على Railway",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon server.js"
+    "start": "node server.js"
   },
   "dependencies": {
     "express": "^4.18.2",
     "socket.io": "^4.6.1"
   },
-  "devDependencies": {
-    "nodemon": "^3.0.1"
+  "engines": {
+    "node": "18.x"
   }
 }
