@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الدردشة العامة</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="chat-page">
+    <div class="chat-container">
+        <header class="chat-header">
+            <h1>الدردشة العامة</h1>
+            <div class="online-count">
+                <span id="users-count">0</span> متصل الآن
+            </div>
+        </header>
+
+        <div class="chat-messages" id="chat-messages">
+            <!-- الرسائل تظهر هنا -->
+        </div>
+
+        <div class="chat-input">
+            <input type="text" id="message-input" placeholder="اكتب رسالتك هنا..." autocomplete="off">
+            <button id="send-btn">إرسال</button>
+        </div>
+    </div>
+    <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
