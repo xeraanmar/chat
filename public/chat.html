@@ -3,396 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>الدردشة الذكية 💬</title>
-    <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --glass-bg: rgba(255, 255, 255, 0.1);
-            --glass-border: rgba(255, 255, 255, 0.2);
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Cairo', sans-serif;
-            background: linear-gradient(135deg, #0f172a, #1e293b);
-            color: #fff;
-            min-height: 100vh;
-        }
-        
-        .glass-panel {
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
-        }
-        
-        .chat-container {
-            height: 100vh;
-            padding: 20px;
-            display: flex;
-            gap: 20px;
-        }
-        
-        /* الشريط الجانبي */
-        .sidebar {
-            width: 300px;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-        
-        .user-profile {
-            padding: 20px;
-            text-align: center;
-        }
-        
-        .user-avatar {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            border-radius: 50%;
-            margin: 0 auto 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            font-weight: bold;
-        }
-        
-        .users-list {
-            flex: 1;
-            overflow-y: auto;
-            padding: 15px;
-        }
-        
-        .user-item {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 12px;
-            border-radius: 12px;
-            margin-bottom: 10px;
-            transition: all 0.3s;
-        }
-        
-        .user-item:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-        
-        .user-item.active .online-dot {
-            background: #10b981;
-        }
-        
-        .online-dot {
-            width: 8px;
-            height: 8px;
-            background: #6b7280;
-            border-radius: 50%;
-            margin-left: auto;
-        }
-        
-        /* منطقة الدردشة */
-        .chat-area {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .chat-header {
-            padding: 20px;
-            border-bottom: 1px solid var(--glass-border);
-        }
-        
-        .chat-messages {
-            flex: 1;
-            overflow-y: auto;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-        
-        .message {
-            max-width: 70%;
-            padding: 15px;
-            border-radius: 18px;
-            position: relative;
-            animation: fadeIn 0.3s ease;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .message.sent {
-            align-self: flex-end;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            border-bottom-right-radius: 5px;
-        }
-        
-        .message.received {
-            align-self: flex-start;
-            background: rgba(255, 255, 255, 0.1);
-            border-bottom-left-radius: 5px;
-        }
-        
-        .message-image {
-            max-width: 300px;
-            border-radius: 10px;
-            margin-top: 10px;
-            cursor: pointer;
-            transition: transform 0.3s;
-        }
-        
-        .message-image:hover {
-            transform: scale(1.02);
-        }
-        
-        .message-time {
-            font-size: 0.75rem;
-            opacity: 0.7;
-            text-align: left;
-            margin-top: 5px;
-        }
-        
-        /* شريط الإدخال */
-        .chat-input {
-            padding: 20px;
-            border-top: 1px solid var(--glass-border);
-        }
-        
-        .input-toolbar {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-        
-        .tool-btn {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            border: 1px solid var(--glass-border);
-            background: rgba(255, 255, 255, 0.05);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .tool-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-        
-        .message-input {
-            flex: 1;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--glass-border);
-            border-radius: 25px;
-            padding: 12px 20px;
-            color: white;
-            font-family: 'Cairo', sans-serif;
-            resize: none;
-            outline: none;
-            max-height: 120px;
-        }
-        
-        .message-input:focus {
-            border-color: #667eea;
-        }
-        
-        .send-btn {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            border: none;
-            color: white;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .send-btn:hover {
-            transform: scale(1.1);
-            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.3);
-        }
-        
-        /* تحميل الصور */
-        .image-preview {
-            max-width: 200px;
-            border-radius: 10px;
-            margin-top: 10px;
-            display: none;
-        }
-        
-        /* التمرير */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        
-        ::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 4px;
-        }
-        
-        ::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 4px;
-        }
-        
-        ::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
-        
-        @media (max-width: 768px) {
-            .chat-container {
-                flex-direction: column;
-                padding: 10px;
-            }
-            
-            .sidebar {
-                width: 100%;
-                height: auto;
-            }
-            
-            .message {
-                max-width: 85%;
-            }
-        }
-    </style>
+    <title>الدردشة العامة - دردشة ذكية</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
-<body>
-    <!-- نافذة عرض الصورة -->
-    <div class="modal fade" id="imageModal" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content bg-dark">
-                <div class="modal-header border-0">
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body text-center">
-                    <img id="modalImage" src="" class="img-fluid rounded">
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- الحاوية الرئيسية -->
+<body class="chat-page">
     <div class="chat-container">
         <!-- الشريط الجانبي -->
         <div class="sidebar">
-            <!-- الملف الشخصي -->
-            <div class="glass-panel user-profile">
-                <div class="user-avatar" id="userAvatar">
-                    <!-- سيتم تعبئته بالجافاسكريبت -->
+            <div class="sidebar-header">
+                <div class="user-info">
+                    <div class="user-avatar" id="userAvatar">
+                        <!-- سيتم تعبئته بالجافاسكريبت -->
+                    </div>
+                    <div class="user-details">
+                        <h3 id="usernameDisplay"></h3>
+                        <p class="online-status"><i class="fas fa-circle online"></i> متصل</p>
+                    </div>
                 </div>
-                <h5 id="userName"></h5>
-                <p class="text-muted mb-0">متصل الآن</p>
-                <button onclick="logout()" class="btn btn-sm btn-outline-light mt-3">
-                    <i class="bi bi-box-arrow-right"></i> خروج
+                <button class="logout-btn" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i> خروج
                 </button>
             </div>
             
-            <!-- قائمة المستخدمين -->
-            <div class="glass-panel users-list">
-                <h6 class="mb-3"><i class="bi bi-people"></i> المستخدمون المتصلون</h6>
-                <div id="usersList">
+            <div class="online-users">
+                <h4><i class="fas fa-users"></i> المستخدمون المتصلون</h4>
+                <div class="users-list" id="usersList">
                     <!-- سيتم تعبئته بالجافاسكريبت -->
                 </div>
             </div>
             
-            <!-- معلومات النظام -->
-            <div class="glass-panel p-3">
-                <h6><i class="bi bi-info-circle"></i> معلومات النظام</h6>
-                <div class="d-flex justify-content-between mt-2">
-                    <small>عدد الرسائل:</small>
-                    <small id="messageCount">0</small>
-                </div>
-                <div class="d-flex justify-content-between">
-                    <small>مستوى الأمان:</small>
-                    <small class="text-success" id="chatSecurity">● مرتفع</small>
-                </div>
+            <div class="sidebar-footer">
+                <p id="onlineCount">0 متصل</p>
+                <p class="server-info">
+                    <i class="fas fa-server"></i>
+                    <span id="serverStatus">● متصل</span>
+                </p>
             </div>
         </div>
         
         <!-- منطقة الدردشة الرئيسية -->
-        <div class="glass-panel chat-area">
-            <!-- العنوان -->
+        <div class="main-chat">
             <div class="chat-header">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <h3 class="mb-1"><i class="bi bi-chat-dots"></i> الدردشة الذكية</h3>
-                        <p class="text-muted mb-0" id="typingIndicator"></p>
-                    </div>
-                    <div class="d-flex gap-2">
-                        <div class="dropdown">
-                            <button class="btn btn-outline-light dropdown-toggle" type="button" 
-                                    data-bs-toggle="dropdown">
-                                <i class="bi bi-gear"></i>
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-dark">
-                                <li><a class="dropdown-item" href="#" onclick="clearChat()">
-                                    <i class="bi bi-trash"></i> مسح الدردشة
-                                </a></li>
-                                <li><a class="dropdown-item" href="#" onclick="toggleNotifications()">
-                                    <i class="bi bi-bell"></i> الإشعارات
-                                </a></li>
-                            </ul>
-                        </div>
-                    </div>
+                <h2><i class="fas fa-comments"></i> الدردشة العامة</h2>
+                <div class="chat-info">
+                    <span id="messageCount">0 رسالة</span>
                 </div>
             </div>
             
-            <!-- الرسائل -->
             <div class="chat-messages" id="chatMessages">
-                <!-- سيتم تعبئتها بالجافاسكريبت -->
+                <!-- الرسائل تظهر هنا -->
+                <div class="welcome-message">
+                    <h3>مرحباً بك في الدردشة!</h3>
+                    <p>ابدأ بالتواصل مع الآخرين...</p>
+                </div>
             </div>
             
-            <!-- شريط الإدخال -->
-            <div class="chat-input">
-                <!-- معاينة الصورة -->
-                <div class="text-center">
-                    <img id="imagePreview" class="image-preview">
+            <div class="typing-indicator" id="typingIndicator"></div>
+            
+            <div class="chat-input-area">
+                <div class="input-container">
+                    <input type="text" id="messageInput" placeholder="اكتب رسالتك هنا..." autocomplete="off">
+                    <button class="send-btn" id="sendButton">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
                 </div>
-                
-                <!-- شريط الأدوات -->
-                <div class="input-toolbar">
-                    <label for="imageUpload" class="tool-btn" title="إرسال صورة">
-                        <i class="bi bi-image"></i>
+                <div class="input-options">
+                    <label for="imageUpload" class="option-btn" title="إرسال صورة">
+                        <i class="fas fa-image"></i>
                     </label>
                     <input type="file" id="imageUpload" accept="image/*" style="display: none;">
-                    
-                    <button class="tool-btn" title="إرسال ملف">
-                        <i class="bi bi-paperclip"></i>
-                    </button>
-                    <button class="tool-btn" title="تسجيل صوتي">
-                        <i class="bi bi-mic"></i>
-                    </button>
-                    <button class="tool-btn" title="إرسال موقع">
-                        <i class="bi bi-geo-alt"></i>
-                    </button>
-                </div>
-                
-                <!-- حقل الإدخال -->
-                <div class="d-flex gap-3">
-                    <textarea class="message-input flex-grow-1" id="messageInput" 
-                              placeholder="اكتب رسالتك هنا..." rows="1"></textarea>
-                    <button class="send-btn align-self-end" id="sendButton">
-                        <i class="bi bi-send"></i>
+                    <button class="option-btn" title="إرسال ملف">
+                        <i class="fas fa-paperclip"></i>
                     </button>
                 </div>
             </div>
@@ -401,50 +84,45 @@
     
     <!-- Scripts -->
     <script src="/socket.io/socket.io.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="script.js"></script>
     <script>
         // تهيئة المتغيرات
         let socket;
         let username;
-        let authToken;
-        let selectedImage = null;
+        let token;
+        let typingTimeout;
         
-        // تهيئة الصفحة
+        // تحميل بيانات المستخدم
         document.addEventListener('DOMContentLoaded', function() {
-            initChat();
-        });
-        
-        // تهيئة الدردشة
-        function initChat() {
-            // جلب بيانات المستخدم
             username = localStorage.getItem('username');
-            authToken = localStorage.getItem('authToken');
+            token = localStorage.getItem('token');
             
-            if (!username || !authToken) {
+            if (!username || !token) {
                 window.location.href = '/';
                 return;
             }
             
-            // تحديث الملف الشخصي
-            document.getElementById('userName').textContent = username;
+            // تحديث المعلومات
+            document.getElementById('usernameDisplay').textContent = username;
             document.getElementById('userAvatar').textContent = username.charAt(0).toUpperCase();
             
             // الاتصال بالخادم
             socket = io();
             
             socket.on('connect', () => {
-                socket.emit('join-chat', { username, token: authToken });
+                console.log('✅ تم الاتصال بالخادم');
+                socket.emit('join-chat', { username, token });
             });
             
             // استقبال الرسائل
             socket.on('welcome', (data) => {
-                showNotification(`مرحباً ${username}!`);
+                console.log(data.message);
                 updateUsersList(data.users);
             });
             
             socket.on('previous-messages', (messages) => {
-                messages.forEach(msg => {
-                    addMessage(msg, msg.username === username);
+                messages.forEach(message => {
+                    addMessage(message, message.username === username);
                 });
                 updateMessageCount();
             });
@@ -452,20 +130,15 @@
             socket.on('new-message', (message) => {
                 addMessage(message, message.username === username);
                 updateMessageCount();
-                
-                // إشعار صوتي
-                if (message.username !== username) {
-                    playNotificationSound();
-                }
             });
             
             socket.on('user-joined', (data) => {
-                showNotification(`${data.username} انضم للدردشة`);
+                addSystemMessage(`${data.username} انضم للدردشة`, 'join');
                 socket.emit('get-users');
             });
             
             socket.on('user-left', (data) => {
-                showNotification(`${data.username} غادر الدردشة`);
+                addSystemMessage(`${data.username} غادر الدردشة`, 'left');
                 socket.emit('get-users');
             });
             
@@ -473,76 +146,26 @@
                 const indicator = document.getElementById('typingIndicator');
                 if (data.isTyping && data.username !== username) {
                     indicator.textContent = `${data.username} يكتب...`;
-                } else {
-                    indicator.textContent = '';
+                    clearTimeout(typingTimeout);
+                    typingTimeout = setTimeout(() => {
+                        indicator.textContent = '';
+                    }, 1000);
                 }
             });
             
-            socket.on('users-list', (users) => {
-                updateUsersList(users);
+            socket.on('auth-error', () => {
+                alert('جلسة منتهية، يرجى تسجيل الدخول مرة أخرى');
+                logout();
             });
             
-            // إعداد الأحداث
+            // طلب قائمة المستخدمين
+            socket.emit('get-users');
+            
+            // إعداد أحداث الإدخال
             document.getElementById('sendButton').addEventListener('click', sendMessage);
             document.getElementById('messageInput').addEventListener('keypress', handleKeyPress);
             document.getElementById('messageInput').addEventListener('input', handleTyping);
-            document.getElementById('imageUpload').addEventListener('change', handleImageUpload);
-            
-            // تكبير النص عند الكتابة
-            const textarea = document.getElementById('messageInput');
-            textarea.addEventListener('input', function() {
-                this.style.height = 'auto';
-                this.style.height = (this.scrollHeight) + 'px';
-            });
-        }
-        
-        // إرسال رسالة
-        async function sendMessage() {
-            const input = document.getElementById('messageInput');
-            const message = input.value.trim();
-            
-            if (!message && !selectedImage) return;
-            
-            let imageUrl = null;
-            
-            // رفع الصورة إذا كانت موجودة
-            if (selectedImage) {
-                try {
-                    const formData = new FormData();
-                    formData.append('image', selectedImage);
-                    
-                    const response = await fetch('/api/upload', {
-                        method: 'POST',
-                        body: formData
-                    });
-                    
-                    const data = await response.json();
-                    if (data.success) {
-                        imageUrl = data.url;
-                    }
-                } catch (error) {
-                    console.error('خطأ في رفع الصورة:', error);
-                }
-            }
-            
-            // إرسال الرسالة عبر Socket
-            socket.emit('send-message', {
-                text: message,
-                image: imageUrl
-            });
-            
-            // مسح الحقول
-            input.value = '';
-            input.style.height = 'auto';
-            
-            if (selectedImage) {
-                document.getElementById('imagePreview').style.display = 'none';
-                selectedImage = null;
-            }
-            
-            // إعلام الآخرين أنني توقفت عن الكتابة
-            socket.emit('typing', false);
-        }
+        });
         
         // إضافة رسالة للواجهة
         function addMessage(message, isSent) {
@@ -551,58 +174,47 @@
             const messageDiv = document.createElement('div');
             messageDiv.className = `message ${isSent ? 'sent' : 'received'}`;
             
-            let contentHTML = `
-                <div class="d-flex justify-content-between align-items-start mb-2">
-                    <strong>${message.username}</strong>
-                    <small class="message-time">${message.time}</small>
+            messageDiv.innerHTML = `
+                <div class="message-header">
+                    <div class="message-sender">${message.username}</div>
+                    <div class="message-time">${message.time}</div>
                 </div>
+                <div class="message-content">${escapeHtml(message.message)}</div>
             `;
             
-            if (message.message) {
-                contentHTML += `<div>${escapeHtml(message.message)}</div>`;
-            }
-            
-            if (message.image) {
-                contentHTML += `
-                    <img src="${message.image}" class="message-image mt-2" 
-                         onclick="showImage('${message.image}')">
-                `;
-            }
-            
-            messageDiv.innerHTML = contentHTML;
             messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
             
-            // التمرير للأسفل
+            // إخفاء رسالة الترحيب
+            document.querySelector('.welcome-message').style.display = 'none';
+        }
+        
+        // إضافة رسالة نظام
+        function addSystemMessage(text, type) {
+            const messagesContainer = document.getElementById('chatMessages');
+            
+            const systemDiv = document.createElement('div');
+            systemDiv.className = 'system-message';
+            systemDiv.innerHTML = `
+                <i class="fas fa-info-circle"></i>
+                <span>${text}</span>
+            `;
+            
+            messagesContainer.appendChild(systemDiv);
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
         }
         
-        // تحديث قائمة المستخدمين
-        function updateUsersList(users) {
-            const usersList = document.getElementById('usersList');
-            usersList.innerHTML = '';
+        // إرسال رسالة
+        function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
             
-            users.forEach(user => {
-                const userItem = document.createElement('div');
-                userItem.className = 'user-item';
-                userItem.innerHTML = `
-                    <div style="width: 32px; height: 32px; background: linear-gradient(135deg, #667eea, #764ba2); 
-                         border-radius: 50%; display: flex; align-items: center; justify-content: center;">
-                        ${user.charAt(0).toUpperCase()}
-                    </div>
-                    <div>
-                        <div>${user}</div>
-                        <small class="text-muted">متصل</small>
-                    </div>
-                    <div class="online-dot"></div>
-                `;
-                usersList.appendChild(userItem);
-            });
-        }
-        
-        // تحديث عدد الرسائل
-        function updateMessageCount() {
-            const messages = document.querySelectorAll('.message').length;
-            document.getElementById('messageCount').textContent = messages;
+            if (!message) return;
+            
+            socket.emit('send-message', { text: message });
+            input.value = '';
+            
+            socket.emit('typing', false);
         }
         
         // التعامل مع الضغط على Enter
@@ -617,84 +229,24 @@
         function handleTyping() {
             const message = document.getElementById('messageInput').value;
             socket.emit('typing', message.length > 0);
+            
+            clearTimeout(typingTimeout);
+            typingTimeout = setTimeout(() => {
+                socket.emit('typing', false);
+            }, 1000);
         }
         
-        // التعامل مع رفع الصور
-        function handleImageUpload(e) {
-            const file = e.target.files[0];
-            if (!file) return;
-            
-            // التحقق من نوع الملف
-            if (!file.type.match('image.*')) {
-                alert('فقط ملفات الصور مسموحة');
-                return;
-            }
-            
-            // التحقق من الحجم
-            if (file.size > 5 * 1024 * 1024) {
-                alert('الحجم الأقصى للصورة هو 5MB');
-                return;
-            }
-            
-            selectedImage = file;
-            
-            // عرض معاينة الصورة
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const preview = document.getElementById('imagePreview');
-                preview.src = e.target.result;
-                preview.style.display = 'block';
-            };
-            reader.readAsDataURL(file);
-        }
-        
-        // عرض الصورة في نافذة
-        function showImage(url) {
-            document.getElementById('modalImage').src = url;
-            const modal = new bootstrap.Modal(document.getElementById('imageModal'));
-            modal.show();
+        // تحديث عدد الرسائل
+        function updateMessageCount() {
+            const count = document.querySelectorAll('.message').length;
+            document.getElementById('messageCount').textContent = `${count} رسالة`;
         }
         
         // تسجيل الخروج
         function logout() {
-            localStorage.removeItem('authToken');
+            localStorage.removeItem('token');
             localStorage.removeItem('username');
             window.location.href = '/';
-        }
-        
-        // مسح الدردشة
-        function clearChat() {
-            if (confirm('هل تريد مسح كل الرسائل؟')) {
-                document.getElementById('chatMessages').innerHTML = '';
-                updateMessageCount();
-            }
-        }
-        
-        // تبديل الإشعارات
-        function toggleNotifications() {
-            // هنا يمكنك إضافة منطق التحكم بالإشعارات
-            alert('سيتم التحكم بالإشعارات قريباً');
-        }
-        
-        // تشغيل صوت الإشعار
-        function playNotificationSound() {
-            const audio = new Audio('data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAZGF0YQQAAAAAAA==');
-            audio.play().catch(() => {});
-        }
-        
-        // إظهار إشعار
-        function showNotification(message) {
-            if (!("Notification" in window)) return;
-            
-            if (Notification.permission === "granted") {
-                new Notification(message);
-            } else if (Notification.permission !== "denied") {
-                Notification.requestPermission().then(permission => {
-                    if (permission === "granted") {
-                        new Notification(message);
-                    }
-                });
-            }
         }
         
         // تهريب النص
@@ -704,9 +256,22 @@
             return div.innerHTML;
         }
         
-        // طلب إذن الإشعارات عند التحميل
-        if ("Notification" in window) {
-            Notification.requestPermission();
+        // تحديث قائمة المستخدمين
+        function updateUsersList(users) {
+            const usersList = document.getElementById('usersList');
+            usersList.innerHTML = '';
+            
+            users.forEach(user => {
+                const userItem = document.createElement('div');
+                userItem.className = 'user-item';
+                userItem.innerHTML = `
+                    <div class="user-avatar-small">${user.charAt(0).toUpperCase()}</div>
+                    <div class="user-name">${user}</div>
+                `;
+                usersList.appendChild(userItem);
+            });
+            
+            document.getElementById('onlineCount').textContent = `${users.length} متصل`;
         }
     </script>
 </body>
