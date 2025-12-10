@@ -1,12 +1,17 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>إنشاء حساب - دردشة ذكية</title>
+    <title>Create Account - Smart Chat</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body[dir="ltr"] {
+            font-family: 'Segoe UI', 'Arial', sans-serif;
+        }
+    </style>
 </head>
 <body class="register-page">
     <div class="register-container">
@@ -14,59 +19,59 @@
             <div class="register-header">
                 <div class="logo">
                     <i class="fas fa-user-plus"></i>
-                    <h1>إنشاء حساب جديد</h1>
+                    <h1>Create New Account</h1>
                 </div>
-                <p class="subtitle">انضم إلى مجتمع الدردشة الذكية</p>
+                <p class="subtitle">Join the Smart Chat community</p>
             </div>
             
             <div class="register-body">
                 <form id="registerForm">
                     <div class="form-group">
                         <label for="regUsername">
-                            <i class="fas fa-user"></i> اسم المستخدم
+                            <i class="fas fa-user"></i> Username
                         </label>
-                        <input type="text" id="regUsername" placeholder="اختر اسم مستخدم فريد" required>
+                        <input type="text" id="regUsername" placeholder="Choose a unique username" required>
                         <div class="form-text" id="usernameFeedback"></div>
                     </div>
                     
                     <div class="form-group">
                         <label for="regEmail">
-                            <i class="fas fa-envelope"></i> البريد الإلكتروني
+                            <i class="fas fa-envelope"></i> Email Address
                         </label>
-                        <input type="email" id="regEmail" placeholder="أدخل بريدك الإلكتروني" required>
+                        <input type="email" id="regEmail" placeholder="Enter your email" required>
                         <div class="form-text" id="emailFeedback"></div>
                     </div>
                     
                     <div class="form-group">
                         <label for="regPassword">
-                            <i class="fas fa-lock"></i> كلمة المرور
+                            <i class="fas fa-lock"></i> Password
                         </label>
                         <div class="password-input">
-                            <input type="password" id="regPassword" placeholder="كلمة مرور قوية" required>
+                            <input type="password" id="regPassword" placeholder="Strong password" required>
                             <button type="button" id="toggleRegPassword">
                                 <i class="fas fa-eye"></i>
                             </button>
                         </div>
                         <div class="password-strength">
                             <div class="strength-bar" id="strengthBar"></div>
-                            <small id="strengthText">قوة كلمة المرور</small>
+                            <small id="strengthText">Password strength</small>
                         </div>
                     </div>
                     
                     <div class="form-group">
                         <label for="regConfirmPassword">
-                            <i class="fas fa-lock"></i> تأكيد كلمة المرور
+                            <i class="fas fa-lock"></i> Confirm Password
                         </label>
-                        <input type="password" id="regConfirmPassword" placeholder="أعد إدخال كلمة المرور" required>
+                        <input type="password" id="regConfirmPassword" placeholder="Re-enter password" required>
                         <div class="form-text" id="confirmFeedback"></div>
                     </div>
                     
                     <button type="submit" class="register-btn">
-                        <i class="fas fa-user-plus"></i> إنشاء حساب
+                        <i class="fas fa-user-plus"></i> Create Account
                     </button>
                     
                     <div class="register-footer">
-                        <p>لديك حساب بالفعل؟ <a href="/">سجل دخول</a></p>
+                        <p>Already have an account? <a href="/">Login here</a></p>
                     </div>
                 </form>
                 
@@ -75,9 +80,8 @@
         </div>
     </div>
     
-    <script src="script.js"></script>
     <script>
-        // تحليل قوة كلمة المرور
+        // Password strength analyzer
         function analyzePasswordStrength() {
             const password = document.getElementById('regPassword').value;
             const bar = document.getElementById('strengthBar');
@@ -94,20 +98,20 @@
             
             if (strength < 40) {
                 bar.style.background = '#ef4444';
-                text.textContent = 'ضعيفة';
+                text.textContent = 'Weak';
             } else if (strength < 60) {
                 bar.style.background = '#f59e0b';
-                text.textContent = 'متوسطة';
+                text.textContent = 'Medium';
             } else if (strength < 80) {
                 bar.style.background = '#3b82f6';
-                text.textContent = 'جيدة';
+                text.textContent = 'Good';
             } else {
                 bar.style.background = '#10b981';
-                text.textContent = 'قوية جداً';
+                text.textContent = 'Very Strong';
             }
         }
         
-        // التحقق من تطابق كلمة المرور
+        // Check password match
         function checkPasswordMatch() {
             const password = document.getElementById('regPassword').value;
             const confirmPassword = document.getElementById('regConfirmPassword').value;
@@ -119,15 +123,15 @@
             }
             
             if (password !== confirmPassword) {
-                feedback.textContent = '❌ كلمتا المرور غير متطابقتين';
+                feedback.textContent = '❌ Passwords do not match';
                 feedback.style.color = '#ef4444';
             } else {
-                feedback.textContent = '✅ كلمتا المرور متطابقتين';
+                feedback.textContent = '✅ Passwords match';
                 feedback.style.color = '#10b981';
             }
         }
         
-        // التحقق من اسم المستخدم
+        // Check username
         function checkUsername() {
             const username = document.getElementById('regUsername').value;
             const feedback = document.getElementById('usernameFeedback');
@@ -138,18 +142,18 @@
             }
             
             if (username.length < 3) {
-                feedback.textContent = '❌ يجب أن يكون الاسم 3 أحرف على الأقل';
+                feedback.textContent = '❌ Username must be at least 3 characters';
                 feedback.style.color = '#ef4444';
             } else if (username.length > 20) {
-                feedback.textContent = '❌ يجب أن لا يزيد الاسم عن 20 حرفاً';
+                feedback.textContent = '❌ Username cannot exceed 20 characters';
                 feedback.style.color = '#ef4444';
             } else {
-                feedback.textContent = '✅ اسم مستخدم صالح';
+                feedback.textContent = '✅ Username available';
                 feedback.style.color = '#10b981';
             }
         }
         
-        // التحقق من البريد الإلكتروني
+        // Check email
         function checkEmail() {
             const email = document.getElementById('regEmail').value;
             const feedback = document.getElementById('emailFeedback');
@@ -161,15 +165,15 @@
             }
             
             if (!emailRegex.test(email)) {
-                feedback.textContent = '❌ بريد إلكتروني غير صالح';
+                feedback.textContent = '❌ Invalid email address';
                 feedback.style.color = '#ef4444';
             } else {
-                feedback.textContent = '✅ بريد إلكتروني صالح';
+                feedback.textContent = '✅ Valid email';
                 feedback.style.color = '#10b981';
             }
         }
         
-        // إرسال نموذج التسجيل
+        // Submit registration form
         document.getElementById('registerForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
@@ -183,7 +187,7 @@
             messageDiv.className = 'message';
             
             if (password !== confirmPassword) {
-                messageDiv.innerHTML = '<i class="fas fa-times"></i> كلمتا المرور غير متطابقتين';
+                messageDiv.innerHTML = '<i class="fas fa-times"></i> Passwords do not match';
                 messageDiv.className = 'message error';
                 return;
             }
@@ -198,7 +202,7 @@
                 const data = await response.json();
                 
                 if (data.success) {
-                    messageDiv.innerHTML = '<i class="fas fa-check"></i> تم إنشاء الحساب بنجاح!';
+                    messageDiv.innerHTML = '<i class="fas fa-check"></i> Account created successfully!';
                     messageDiv.className = 'message success';
                     
                     setTimeout(() => {
@@ -211,18 +215,18 @@
                 }
                 
             } catch (error) {
-                messageDiv.innerHTML = '<i class="fas fa-times"></i> خطأ في الاتصال بالخادم';
+                messageDiv.innerHTML = '<i class="fas fa-times"></i> Server connection error';
                 messageDiv.className = 'message error';
             }
         });
         
-        // أحداث المدخلات
+        // Input events
         document.getElementById('regPassword').addEventListener('input', analyzePasswordStrength);
         document.getElementById('regConfirmPassword').addEventListener('input', checkPasswordMatch);
         document.getElementById('regUsername').addEventListener('input', checkUsername);
         document.getElementById('regEmail').addEventListener('input', checkEmail);
         
-        // إظهار/إخفاء كلمة المرور
+        // Show/Hide password
         document.getElementById('toggleRegPassword').addEventListener('click', function() {
             const passwordField = document.getElementById('regPassword');
             const icon = this.querySelector('i');

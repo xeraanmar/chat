@@ -1,12 +1,17 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تسجيل الدخول - دردشة ذكية</title>
+    <title>Login - Smart Chat</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body[dir="ltr"] {
+            font-family: 'Segoe UI', 'Arial', sans-serif;
+        }
+    </style>
 </head>
 <body class="login-page">
     <div class="login-container">
@@ -14,26 +19,26 @@
             <div class="login-header">
                 <div class="logo">
                     <i class="fas fa-comments"></i>
-                    <h1>الدردشة الذكية</h1>
+                    <h1>Smart Chat</h1>
                 </div>
-                <p class="subtitle">سجل دخولك للانضمام إلى المحادثة</p>
+                <p class="subtitle">Login to join the conversation</p>
             </div>
             
             <div class="login-body">
                 <form id="loginForm">
                     <div class="form-group">
                         <label for="username">
-                            <i class="fas fa-user"></i> اسم المستخدم
+                            <i class="fas fa-user"></i> Username
                         </label>
-                        <input type="text" id="username" placeholder="أدخل اسم المستخدم" required>
+                        <input type="text" id="username" placeholder="Enter your username" required>
                     </div>
                     
                     <div class="form-group">
                         <label for="password">
-                            <i class="fas fa-lock"></i> كلمة المرور
+                            <i class="fas fa-lock"></i> Password
                         </label>
                         <div class="password-input">
-                            <input type="password" id="password" placeholder="أدخل كلمة المرور" required>
+                            <input type="password" id="password" placeholder="Enter your password" required>
                             <button type="button" id="togglePassword">
                                 <i class="fas fa-eye"></i>
                             </button>
@@ -41,14 +46,14 @@
                     </div>
                     
                     <button type="submit" class="login-btn">
-                        <i class="fas fa-sign-in-alt"></i> تسجيل الدخول
+                        <i class="fas fa-sign-in-alt"></i> Login
                     </button>
                     
                     <div class="login-footer">
-                        <p>ليس لديك حساب؟ <a href="/register">سجل الآن</a></p>
+                        <p>Don't have an account? <a href="/register">Register Now</a></p>
                         <p class="server-status">
                             <i class="fas fa-circle online"></i>
-                            <span id="statusText">الخادم متصل</span>
+                            <span id="statusText">Server Connected</span>
                         </p>
                     </div>
                 </form>
@@ -58,22 +63,21 @@
         </div>
     </div>
     
-    <script src="script.js"></script>
     <script>
-        // التحقق من حالة الخادم
+        // Check server status
         async function checkServerStatus() {
             try {
                 const response = await fetch('/api/status');
                 const data = await response.json();
-                document.getElementById('statusText').textContent = `الخادم متصل (${data.users} مستخدم)`;
+                document.getElementById('statusText').textContent = `Server Online (${data.users} users)`;
                 return true;
             } catch (error) {
-                document.getElementById('statusText').textContent = 'جاري الاتصال...';
+                document.getElementById('statusText').textContent = 'Connecting...';
                 return false;
             }
         }
         
-        // تسجيل الدخول
+        // Login
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
@@ -94,14 +98,14 @@
                 const data = await response.json();
                 
                 if (data.success) {
-                    messageDiv.innerHTML = '<i class="fas fa-check"></i> تم تسجيل الدخول بنجاح!';
+                    messageDiv.innerHTML = '<i class="fas fa-check"></i> Login successful!';
                     messageDiv.className = 'message success';
                     
-                    // حفظ التوكن
+                    // Save token
                     localStorage.setItem('token', data.token);
                     localStorage.setItem('username', data.username);
                     
-                    // الانتقال للدردشة
+                    // Redirect to chat
                     setTimeout(() => {
                         window.location.href = '/chat';
                     }, 1000);
@@ -112,12 +116,12 @@
                 }
                 
             } catch (error) {
-                messageDiv.innerHTML = '<i class="fas fa-times"></i> خطأ في الاتصال بالخادم';
+                messageDiv.innerHTML = '<i class="fas fa-times"></i> Server connection error';
                 messageDiv.className = 'message error';
             }
         });
         
-        // إظهار/إخفاء كلمة المرور
+        // Show/Hide password
         document.getElementById('togglePassword').addEventListener('click', function() {
             const passwordField = document.getElementById('password');
             const icon = this.querySelector('i');
@@ -131,7 +135,7 @@
             }
         });
         
-        // التحقق من حالة الخادم عند التحميل
+        // Check server status on load
         checkServerStatus();
         setInterval(checkServerStatus, 30000);
     </script>

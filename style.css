@@ -615,3 +615,53 @@ body {
         padding: 30px 20px;
     }
 }
+/* ===== LTR SUPPORT ===== */
+body[dir="ltr"] {
+    font-family: 'Segoe UI', 'Arial', sans-serif;
+    text-align: left;
+}
+
+body[dir="ltr"] .logo {
+    justify-content: center;
+}
+
+body[dir="ltr"] .form-group label {
+    justify-content: flex-start;
+}
+
+body[dir="ltr"] .password-input button {
+    right: 15px;
+    left: auto;
+}
+
+body[dir="ltr"] .login-footer,
+body[dir="ltr"] .register-footer {
+    text-align: center;
+}
+
+body[dir="ltr"] .server-status {
+    justify-content: center;
+}
+
+/* Chat alignment for LTR */
+body[dir="ltr"] .message.sent {
+    align-self: flex-end;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 15px;
+}
+
+body[dir="ltr"] .message.received {
+    align-self: flex-start;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 15px;
+}
+
+/* User item alignment */
+body[dir="ltr"] .user-item {
+    flex-direction: row;
+}
+
+/* Sidebar footer */
+body[dir="ltr"] .sidebar-footer p {
+    justify-content: center;
+}

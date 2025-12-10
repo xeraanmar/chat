@@ -1,62 +1,67 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>الدردشة العامة - دردشة ذكية</title>
+    <title>General Chat - Smart Chat</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body[dir="ltr"] {
+            font-family: 'Segoe UI', 'Arial', sans-serif;
+        }
+    </style>
 </head>
 <body class="chat-page">
     <div class="chat-container">
-        <!-- الشريط الجانبي -->
+        <!-- Sidebar -->
         <div class="sidebar">
             <div class="sidebar-header">
                 <div class="user-info">
                     <div class="user-avatar" id="userAvatar">
-                        <!-- سيتم تعبئته بالجافاسكريبت -->
+                        <!-- Will be filled by JavaScript -->
                     </div>
                     <div class="user-details">
                         <h3 id="usernameDisplay"></h3>
-                        <p class="online-status"><i class="fas fa-circle online"></i> متصل</p>
+                        <p class="online-status"><i class="fas fa-circle online"></i> Online</p>
                     </div>
                 </div>
                 <button class="logout-btn" onclick="logout()">
-                    <i class="fas fa-sign-out-alt"></i> خروج
+                    <i class="fas fa-sign-out-alt"></i> Logout
                 </button>
             </div>
             
             <div class="online-users">
-                <h4><i class="fas fa-users"></i> المستخدمون المتصلون</h4>
+                <h4><i class="fas fa-users"></i> Online Users</h4>
                 <div class="users-list" id="usersList">
-                    <!-- سيتم تعبئته بالجافاسكريبت -->
+                    <!-- Will be filled by JavaScript -->
                 </div>
             </div>
             
             <div class="sidebar-footer">
-                <p id="onlineCount">0 متصل</p>
+                <p id="onlineCount">0 online</p>
                 <p class="server-info">
                     <i class="fas fa-server"></i>
-                    <span id="serverStatus">● متصل</span>
+                    <span id="serverStatus">● Connected</span>
                 </p>
             </div>
         </div>
         
-        <!-- منطقة الدردشة الرئيسية -->
+        <!-- Main Chat Area -->
         <div class="main-chat">
             <div class="chat-header">
-                <h2><i class="fas fa-comments"></i> الدردشة العامة</h2>
+                <h2><i class="fas fa-comments"></i> General Chat</h2>
                 <div class="chat-info">
-                    <span id="messageCount">0 رسالة</span>
+                    <span id="messageCount">0 messages</span>
                 </div>
             </div>
             
             <div class="chat-messages" id="chatMessages">
-                <!-- الرسائل تظهر هنا -->
+                <!-- Messages will appear here -->
                 <div class="welcome-message">
-                    <h3>مرحباً بك في الدردشة!</h3>
-                    <p>ابدأ بالتواصل مع الآخرين...</p>
+                    <h3>Welcome to the Chat!</h3>
+                    <p>Start communicating with others...</p>
                 </div>
             </div>
             
@@ -64,17 +69,17 @@
             
             <div class="chat-input-area">
                 <div class="input-container">
-                    <input type="text" id="messageInput" placeholder="اكتب رسالتك هنا..." autocomplete="off">
+                    <input type="text" id="messageInput" placeholder="Type your message here..." autocomplete="off">
                     <button class="send-btn" id="sendButton">
-                        <i class="fas fa-paper-plane"></i>
+                        <i class="fas fa-paper-plane"></i> Send
                     </button>
                 </div>
                 <div class="input-options">
-                    <label for="imageUpload" class="option-btn" title="إرسال صورة">
+                    <label for="imageUpload" class="option-btn" title="Send image">
                         <i class="fas fa-image"></i>
                     </label>
                     <input type="file" id="imageUpload" accept="image/*" style="display: none;">
-                    <button class="option-btn" title="إرسال ملف">
+                    <button class="option-btn" title="Send file">
                         <i class="fas fa-paperclip"></i>
                     </button>
                 </div>
@@ -84,15 +89,14 @@
     
     <!-- Scripts -->
     <script src="/socket.io/socket.io.js"></script>
-    <script src="script.js"></script>
     <script>
-        // تهيئة المتغيرات
+        // Initialize variables
         let socket;
         let username;
         let token;
         let typingTimeout;
         
-        // تحميل بيانات المستخدم
+        // Load user data
         document.addEventListener('DOMContentLoaded', function() {
             username = localStorage.getItem('username');
             token = localStorage.getItem('token');
@@ -102,19 +106,19 @@
                 return;
             }
             
-            // تحديث المعلومات
+            // Update user info
             document.getElementById('usernameDisplay').textContent = username;
             document.getElementById('userAvatar').textContent = username.charAt(0).toUpperCase();
             
-            // الاتصال بالخادم
+            // Connect to server
             socket = io();
             
             socket.on('connect', () => {
-                console.log('✅ تم الاتصال بالخادم');
+                console.log('✅ Connected to server');
                 socket.emit('join-chat', { username, token });
             });
             
-            // استقبال الرسائل
+            // Receive messages
             socket.on('welcome', (data) => {
                 console.log(data.message);
                 updateUsersList(data.users);
@@ -133,19 +137,19 @@
             });
             
             socket.on('user-joined', (data) => {
-                addSystemMessage(`${data.username} انضم للدردشة`, 'join');
+                addSystemMessage(`${data.username} joined the chat`, 'join');
                 socket.emit('get-users');
             });
             
             socket.on('user-left', (data) => {
-                addSystemMessage(`${data.username} غادر الدردشة`, 'left');
+                addSystemMessage(`${data.username} left the chat`, 'left');
                 socket.emit('get-users');
             });
             
             socket.on('user-typing', (data) => {
                 const indicator = document.getElementById('typingIndicator');
                 if (data.isTyping && data.username !== username) {
-                    indicator.textContent = `${data.username} يكتب...`;
+                    indicator.textContent = `${data.username} is typing...`;
                     clearTimeout(typingTimeout);
                     typingTimeout = setTimeout(() => {
                         indicator.textContent = '';
@@ -154,20 +158,20 @@
             });
             
             socket.on('auth-error', () => {
-                alert('جلسة منتهية، يرجى تسجيل الدخول مرة أخرى');
+                alert('Session expired, please login again');
                 logout();
             });
             
-            // طلب قائمة المستخدمين
+            // Request users list
             socket.emit('get-users');
             
-            // إعداد أحداث الإدخال
+            // Setup input events
             document.getElementById('sendButton').addEventListener('click', sendMessage);
             document.getElementById('messageInput').addEventListener('keypress', handleKeyPress);
             document.getElementById('messageInput').addEventListener('input', handleTyping);
         });
         
-        // إضافة رسالة للواجهة
+        // Add message to interface
         function addMessage(message, isSent) {
             const messagesContainer = document.getElementById('chatMessages');
             
@@ -185,11 +189,11 @@
             messagesContainer.appendChild(messageDiv);
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
             
-            // إخفاء رسالة الترحيب
+            // Hide welcome message
             document.querySelector('.welcome-message').style.display = 'none';
         }
         
-        // إضافة رسالة نظام
+        // Add system message
         function addSystemMessage(text, type) {
             const messagesContainer = document.getElementById('chatMessages');
             
@@ -204,7 +208,7 @@
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
         }
         
-        // إرسال رسالة
+        // Send message
         function sendMessage() {
             const input = document.getElementById('messageInput');
             const message = input.value.trim();
@@ -217,7 +221,7 @@
             socket.emit('typing', false);
         }
         
-        // التعامل مع الضغط على Enter
+        // Handle Enter key press
         function handleKeyPress(e) {
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
@@ -225,7 +229,7 @@
             }
         }
         
-        // التعامل مع الكتابة
+        // Handle typing
         function handleTyping() {
             const message = document.getElementById('messageInput').value;
             socket.emit('typing', message.length > 0);
@@ -236,27 +240,27 @@
             }, 1000);
         }
         
-        // تحديث عدد الرسائل
+        // Update message count
         function updateMessageCount() {
             const count = document.querySelectorAll('.message').length;
-            document.getElementById('messageCount').textContent = `${count} رسالة`;
+            document.getElementById('messageCount').textContent = `${count} messages`;
         }
         
-        // تسجيل الخروج
+        // Logout
         function logout() {
             localStorage.removeItem('token');
             localStorage.removeItem('username');
             window.location.href = '/';
         }
         
-        // تهريب النص
+        // Escape HTML
         function escapeHtml(text) {
             const div = document.createElement('div');
             div.textContent = text;
             return div.innerHTML;
         }
         
-        // تحديث قائمة المستخدمين
+        // Update users list
         function updateUsersList(users) {
             const usersList = document.getElementById('usersList');
             usersList.innerHTML = '';
@@ -271,7 +275,7 @@
                 usersList.appendChild(userItem);
             });
             
-            document.getElementById('onlineCount').textContent = `${users.length} متصل`;
+            document.getElementById('onlineCount').textContent = `${users.length} online`;
         }
     </script>
 </body>
