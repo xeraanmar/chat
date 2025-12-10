@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إنشاء حساب جديد</title>
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+        }
+        
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            min-height: 100vh;
+            color: white;
+        }
+        
+        .register-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 25px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 600px;
+            overflow: hidden;
+        }
+        
+        .form-control {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--glass-border);
+            color: white;
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+        }
+        
+        .form-control:focus {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: #667eea;
+            color: white;
+            box-shadow: 0 0 0 0.25rem rgba(102, 126, 234, 0.25);
+        }
+        
+        .form-control::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .btn-gradient {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: none;
+            color: white;
+            padding: 0.75rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+        }
+        
+        .password-strength {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            margin-top: 0.5rem;
+            overflow: hidden;
+        }
+        
+        .strength-meter {
+            height: 100%;
+            width: 0%;
+            transition: all 0.3s;
+        }
+        
+        @media (max-width: 768px) {
+            .glass-card {
+                border-radius: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <div class="glass-card p-4 p-md-5">
+            <div class="text-center mb-4">
+                <div class="mb-3">
+                    <i class="bi bi-shield-lock display-4" style="color: #667eea;"></i>
+                </div>
+                <h2>إنشاء حساب جديد</h2>
+                <p class="text-muted">انضم إلى مجتمع الدردشة الذكي</p>
+            </div>
+            
+            <form id="registerForm">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">اسم المستخدم</label>
+                        <input type="text" class="form-control" id="regUsername" required>
+                        <div class="form-text" id="usernameFeedback"></div>
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">البريد الإلكتروني</label>
+                        <input type="email" class="form-control" id="regEmail" required>
+                        <div class="form-text" id="emailFeedback"></div>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">كلمة المرور</label>
+                    <input type="password" class="form-control" id="regPassword" required>
+                    <div class="password-strength mt-2">
+                        <div class="strength-meter" id="strengthMeter"></div>
+                    </div>
+                    <small class="text-end d-block" id="strengthText">قوة كلمة المرور</small>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">تأكيد كلمة المرور</label>
+                    <input type="password" class="form-control" id="regConfirmPassword" required>
+                    <div class="form-text" id="confirmFeedback"></div>
+                </div>
+                
+                <div class="mb-4">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="termsCheck" required>
+                        <label class="form-check-label" for="termsCheck">
+                            أوافق على <a href="#" class="text-info">شروط الاستخدام</a> و <a href="#" class="text-info">سياسة الخصوصية</a>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-gradient">
+                        <i class="bi bi-person-plus"></i> إنشاء حساب
+                    </button>
+                    <a href="/" class="btn btn-outline-light">
+                        <i class="bi bi-arrow-right"></i> لديك حساب بالفعل؟
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // تحليل قوة كلمة المرور
+            document.getElementById('regPassword').addEventListener('input', analyzePasswordStrength);
+            
+            // تحقق من تطابق كلمة المرور
+            document.getElementById('regConfirmPassword').addEventListener('input', checkPasswordMatch);
+            
+            // تحليل اسم المستخدم
+            document.getElementById('regUsername').addEventListener('input', analyzeRegUsername);
+            
+            // تحليل البريد الإلكتروني
+            document.getElementById('regEmail').addEventListener('input', analyzeEmail);
+            
+            // إرسال النموذج
+            document.getElementById('registerForm').addEventListener('submit', handleRegister);
+        });
+        
+        function analyzePasswordStrength() {
+            const password = document.getElementById('regPassword').value;
+            const meter = document.getElementById('strengthMeter');
+            const text = document.getElementById('strengthText');
+            
+            let strength = 0;
+            const checks = [
+                password.length >= 8,
+                password.length >= 12,
+                /[a-z]/.test(password) && /[A-Z]/.test(password),
+                /\d/.test(password),
+                /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)
+            ];
+            
+            checks.forEach(check => {
+                if (check) strength += 20;
+            });
+            
+            strength = Math.min(strength, 100);
+            meter.style.width = `${strength}%`;
+            
+            if (strength < 40) {
+                meter.style.background = '#ef4444';
+                text.textContent = 'ضعيفة جداً';
+            } else if (strength < 60) {
+                meter.style.background = '#f59e0b';
+                text.textContent = 'ضعيفة';
+            } else if (strength < 80) {
+                meter.style.background = '#3b82f6';
+                text.textContent = 'جيدة';
+            } else {
+                meter.style.background = '#10b981';
+                text.textContent = 'قوية جداً';
+            }
+        }
+        
+        function checkPasswordMatch() {
+            const password = document.getElementById('regPassword').value;
+            const confirmPassword = document.getElementById('regConfirmPassword').value;
+            const feedback = document.getElementById('confirmFeedback');
+            
+            if (!confirmPassword) {
+                feedback.textContent = '';
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                feedback.textContent = '❌ كلمتا المرور غير متطابقتين';
+                feedback.style.color = '#ef4444';
+            } else {
+                feedback.textContent = '✅ كلمتا المرور متطابقتين';
+                feedback.style.color = '#10b981';
+            }
+        }
+        
+        function analyzeRegUsername() {
+            const username = document.getElementById('regUsername').value;
+            const feedback = document.getElementById('usernameFeedback');
+            
+            if (!username) {
+                feedback.textContent = '';
+                return;
+            }
+            
+            if (username.length < 3) {
+                feedback.textContent = '❌ يجب أن يكون الاسم 3 أحرف على الأقل';
+                feedback.style.color = '#ef4444';
+            } else if (username.length > 20) {
+                feedback.textContent = '❌ يجب أن لا يزيد الاسم عن 20 حرفاً';
+                feedback.style.color = '#ef4444';
+            } else if (!/^[a-zA-Z0-9_\u0600-\u06FF]+$/.test(username)) {
+                feedback.textContent = '❌ يمكن استخدام الأحرف العربية والإنجليزية والأرقام فقط';
+                feedback.style.color = '#ef4444';
+            } else {
+                feedback.textContent = '✅ اسم مستخدم صالح';
+                feedback.style.color = '#10b981';
+            }
+        }
+        
+        function analyzeEmail() {
+            const email = document.getElementById('regEmail').value;
+            const feedback = document.getElementById('emailFeedback');
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            
+            if (!email) {
+                feedback.textContent = '';
+                return;
+            }
+            
+            if (!emailRegex.test(email)) {
+                feedback.textContent = '❌ بريد إلكتروني غير صالح';
+                feedback.style.color = '#ef4444';
+            } else {
+                feedback.textContent = '✅ بريد إلكتروني صالح';
+                feedback.style.color = '#10b981';
+            }
+        }
+        
+        async function handleRegister(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('regUsername').value;
+            const email = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPassword').value;
+            const confirmPassword = document.getElementById('regConfirmPassword').value;
+            
+            // التحقق من البيانات
+            if (password !== confirmPassword) {
+                alert('كلمتا المرور غير متطابقتين');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, email, password })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    alert('تم إنشاء الحساب بنجاح! يمكنك الآن تسجيل الدخول.');
+                    window.location.href = '/';
+                } else {
+                    alert(data.error || 'حدث خطأ في إنشاء الحساب');
+                }
+                
+            } catch (error) {
+                alert('حدث خطأ في الاتصال بالخادم');
+            }
+        }
+    </script>
+</body>
+</html>
