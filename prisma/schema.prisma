@@ -1,0 +1,93 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(uuid())
+  phoneNumber   String    @unique
+  username      String?   @unique
+  firstName     String?
+  lastName      String?
+  bio           String?
+  avatarUrl     String?
+  color         String?   @default("#3b82f6") // User profile color
+  isOnline      Boolean   @default(false)
+  lastSeen      DateTime  @default(now())
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  messages      Message[]
+  chats         Chat[]    @relation("UserChats")
+  adminChats    Chat[]    @relation("ChatAdmins")
+  
+  // Contacts system
+  contacts      Contact[] @relation("UserContacts")
+  contactOf     Contact[] @relation("ContactOwner")
+}
+
+model Contact {
+  id            String    @id @default(uuid())
+  ownerId       String
+  owner         User      @relation("ContactOwner", fields: [ownerId], references: [id])
+  
+  contactUserId String
+  contactUser   User      @relation("UserContacts", fields: [contactUserId], references: [id])
+  
+  firstName     String?   // Custom name for contact
+  lastName      String?
+  
+  createdAt     DateTime  @default(now())
+  
+  @@unique([ownerId, contactUserId])
+}
+
+model Chat {
+  id            String    @id @default(uuid())
+  type          ChatType  @default(PRIVATE)
+  title         String?   // For groups/channels
+  avatarUrl     String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  messages      Message[]
+  participants  User[]    @relation("UserChats")
+  admins        User[]    @relation("ChatAdmins")
+}
+
+model Message {
+  id            String    @id @default(uuid())
+  text          String?
+  mediaUrl      String?
+  mediaType     MediaType?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  chatId        String
+  chat          Chat      @relation(fields: [chatId], references: [id])
+  
+  senderId      String
+  sender        User      @relation(fields: [senderId], references: [id])
+
+  readBy        String[]  // Array of user IDs who read the message
+}
+
+enum ChatType {
+  PRIVATE
+  GROUP
+  CHANNEL
+}
+
+enum MediaType {
+  IMAGE
+  VIDEO
+  AUDIO
+  FILE
+}
